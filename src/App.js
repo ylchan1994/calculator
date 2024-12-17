@@ -13,12 +13,15 @@ export default function App() {
 
   function handleNumber(value) {
     
+        
     if (isFirst) {
+      if(operations.first.length >= 8) {return;}
       setOperations({...operations, ['first']: operations.first + value})
 
       setIsFinal(false);
 
     } else {
+      if(operations.second.length >= 8) {return;}
       setOperations({...operations, ['second']: operations.second + value})
     }
   }
@@ -42,6 +45,12 @@ export default function App() {
         if (isFirst) {
           setOperations({...operations, ['first']: operations.first.slice(0, -1)})
         } else {
+
+          if ( operations.second === '' || operations.second === '0' ) {
+            setOperations({...operations, ['operator']: ''})
+            setIsFirst(true);
+            break;
+          }
           setOperations({...operations, ['second']: operations.second.slice(0, -1)})
         };
         break;
@@ -107,7 +116,14 @@ export default function App() {
         break;
     }
 
-    if (final % 1 !== 0) {final = Number(final.toFixed(3))};
+    if (final % 1 !== 0) {
+      final = Number(final.toFixed(3));
+    };
+
+    
+    if (final >= 100000000) {
+      final = 'ERR';
+    };
 
     setOperations({
       first: '',
